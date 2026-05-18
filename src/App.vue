@@ -23,9 +23,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen transition-colors duration-300 bg-gray-100 dark:bg-gray-800">
+  <div class="min-h-screen transition-colors duration-300 bg-gray-100 dark:bg-stone-800">
     <NavBar :isDark="isDark" @toggle-dark="toggleDark" />
-    <main class="p-4 pt-20">
+    <main>
       <router-view />
     </main>
   </div>

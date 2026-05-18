@@ -14,7 +14,7 @@ const menuOpen = ref(false)
 </script>
 
 <template>
-  <nav class="flex justify-between items-center w-full fixed top-0 p-4 bg-white dark:bg-gray-900 shadow-md z-50">
+  <nav class="flex justify-between items-center w-full fixed top-0 p-4 bg-white dark:bg-stone-900 shadow-md z-50">
     <div class="flex items-center gap-4">
       <router-link to="/" class="text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400">Inicio</router-link>
       <router-link v-if="userStore.isLogged" to="/dashboard"
@@ -25,8 +25,9 @@ const menuOpen = ref(false)
       <router-link v-if="userStore.isLogged" :to="userStore.role === 'supervisor' ? '/panel' : '#'"
         class="text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400"
         :class="{ 'opacity-50 cursor-not-allowed': userStore.role !== 'supervisor' }">Panel</router-link>
-      <router-link v-if="userStore.isLogged" to="/ventas"
-        class="text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400">Ventas</router-link>
+        <router-link v-if="userStore.isLogged" :to="userStore.role === 'supervisor' ? '/store' : '#'"
+        class="text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400"
+        :class="{ 'opacity-50 cursor-not-allowed': userStore.role !== 'supervisor' }">Store</router-link>
     </div>
 
     <div class="ml-auto flex gap-4 items-center">
@@ -42,7 +43,7 @@ const menuOpen = ref(false)
         </button>
       </div>
 
-      <!-- <div class="relative">
+      <div class="relative">
         <button @click="menuOpen = !menuOpen" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">⋮</button>
         <div v-if="menuOpen" class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded shadow-md">
           <button @click="$emit('toggle-dark'); menuOpen = false"
@@ -50,7 +51,7 @@ const menuOpen = ref(false)
             {{ isDark ? 'Modo Claro' : 'Modo Oscuro' }}
           </button>
         </div>
-      </div> -->
+      </div>
     </div>
   </nav>
 </template>

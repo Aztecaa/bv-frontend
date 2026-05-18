@@ -5,8 +5,8 @@ const routes = [
     { path: '/', component: () => import('../views/Home.vue') },
     { path: '/login', component: () => import('../views/Login.vue') },
     { path: '/panel', component: () => import('../views/Panel.vue'), meta: { requiresAuth: true, roles: ['supervisor'] } },
-    { path: '/ventas', component: () => import('../views/Ventas.vue'), meta: { requiresAuth: true, roles: ['cajero', 'supervisor'] } },
-    { path: '/dashboard', component: () => import('../views/Dashboard.vue'), meta: { requiresAuth: true } },
+    { path: '/dashboard', component: () => import('../views/Dashboard.vue'), meta: { requiresAuth: true, roles: [ 'supervisor'] } },
+    { path: '/store', component: () => import('../views/Store.vue'), meta: { requiresAuth: true, roles: ['cliente', 'supervisor'] } },
     { path: '/users', component: () => import('../views/Users.vue'), meta: { requiresAuth: true, roles: ['supervisor'] } }
 ]
 
@@ -19,9 +19,9 @@ router.beforeEach((to, from, next) => {
     const userStore = useUserStore()
 
     if (to.meta.requiresAuth && !userStore.user) return next('/login')
-    if (to.path === '/login' && userStore.user) return next('/dashboard')
+    if (to.path === '/login' && userStore.user) return next('/store')
 
-    if (to.meta.roles && !to.meta.roles.includes(userStore.role)) return next('/dashboard')
+    if (to.meta.roles && !to.meta.roles.includes(userStore.role)) return next('/store')
 
     next()
 })
