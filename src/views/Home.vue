@@ -44,7 +44,9 @@
           @click="goToSlide(index)"
           class="w-3 h-3 rounded-full cursor-pointer transition"
           :class="
-            index === currentIndex ? 'bg-white scale-125' : 'bg-gray-400 hover:bg-white'
+            index === currentIndex
+              ? 'bg-white scale-125'
+              : 'bg-gray-400 hover:bg-white'
           "
         ></span>
       </div>
@@ -54,7 +56,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import axios from "axios";
+import api from "../services/api";
 
 const autos = ref([]);
 const currentIndex = ref(0);
@@ -77,7 +79,7 @@ function shuffleArray(array) {
 --------------------------- */
 async function fetchAutos() {
   try {
-    const { data } = await axios.get("http://localhost:4000/autos");
+    const { data } = await api.get("/autos");
     const mezclados = shuffleArray(data).slice(0, 10);
     autos.value = mezclados;
   } catch (error) {
@@ -94,7 +96,8 @@ function nextSlide() {
 }
 
 function prevSlide() {
-  currentIndex.value = (currentIndex.value - 1 + autos.value.length) % autos.value.length;
+  currentIndex.value =
+    (currentIndex.value - 1 + autos.value.length) % autos.value.length;
   resetInterval();
 }
 

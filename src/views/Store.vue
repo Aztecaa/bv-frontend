@@ -47,7 +47,9 @@
       </div>
 
       <!-- CARRUSEL -->
-      <div class="relative l-full h-[400px] bg-gray-300 overflow-hidden rounded-xl mb-10">
+      <div
+        class="relative l-full h-[400px] bg-gray-300 overflow-hidden rounded-xl mb-10"
+      >
         <img
           v-if="autos.length"
           :src="autos[currentIndex].imagen"
@@ -57,7 +59,9 @@
         />
 
         <!-- Info -->
-        <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4">
+        <div
+          class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4"
+        >
           <h2 class="text-lg font-bold">
             {{ autos[currentIndex]?.marca }} {{ autos[currentIndex]?.modelo }}
           </h2>
@@ -89,7 +93,9 @@
             @click="goToSlide(index)"
             class="w-3 h-3 rounded-full cursor-pointer transition"
             :class="
-              index === currentIndex ? 'bg-white scale-125' : 'bg-gray-400 hover:bg-white'
+              index === currentIndex
+                ? 'bg-white scale-125'
+                : 'bg-gray-400 hover:bg-white'
             "
           ></span>
         </div>
@@ -108,7 +114,9 @@
             class="w-full h-56 object-cover rounded-t-lg"
           />
           <div class="m-2">
-            <h3 class="mt-3 text-lg font-semibold">{{ auto.marca }} {{ auto.modelo }}</h3>
+            <h3 class="mt-3 text-lg font-semibold">
+              {{ auto.marca }} {{ auto.modelo }}
+            </h3>
             <p class="text-gray-600">{{ auto.anio }} - {{ auto.km }} km</p>
             <p class="font-bold mt-2">$ {{ auto.precio }}</p>
           </div>
@@ -123,7 +131,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import axios from "axios";
+import api from "../services/api";
 
 const showDetails = ref(false);
 const autos = ref([]);
@@ -136,9 +144,6 @@ const seleccionarCategoria = (categoria) => {
   filtroCategoria.value = categoria;
 };
 
-// 📡 URL del backend (ajustá si es local o Render)
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
-
 const abrirModalDetails = () => {
   showDetails.value = true;
 };
@@ -147,7 +152,7 @@ const abrirModalDetails = () => {
 const fetchAutos = async () => {
   try {
     console.log("🛰️ Solicitando autos desde backend...");
-    const response = await axios.get(`${API_URL}/autos`, { withCredentials: true });
+    const response = await api.get("/autos");
     autos.value = response.data;
     console.log("✅ Autos cargados:", autos.value);
   } catch (err) {
@@ -166,8 +171,10 @@ const filteredAutos = computed(() => {
       .includes(searchQuery.value.toLowerCase());
 
     const coincideCategoria = filtroCategoria.value
-      ? auto.categoria?.tipo?.toLowerCase() === filtroCategoria.value.toLowerCase() ||
-        auto.categoria?.segmento?.toLowerCase() === filtroCategoria.value.toLowerCase()
+      ? auto.categoria?.tipo?.toLowerCase() ===
+          filtroCategoria.value.toLowerCase() ||
+        auto.categoria?.segmento?.toLowerCase() ===
+          filtroCategoria.value.toLowerCase()
       : true;
 
     return coincideBusqueda && coincideCategoria;
@@ -185,7 +192,7 @@ onMounted(async () => {
   startInterval();
 });
 
-onUnmounted(() => clearInterval(interval))
+onUnmounted(() => clearInterval(interval));
 
 const currentIndex = ref(0);
 let interval = null;
@@ -203,7 +210,8 @@ function nextSlide() {
 
 function prevSlide() {
   if (!autos.value.length) return;
-  currentIndex.value = (currentIndex.value - 1 + autos.value.length) % autos.value.length;
+  currentIndex.value =
+    (currentIndex.value - 1 + autos.value.length) % autos.value.length;
   resetInterval();
 }
 
